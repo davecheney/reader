@@ -5,9 +5,8 @@
 //
 // Currently supported schemes are:
 //
-// - for stdin
-//
-// http:// for http 2xx responses
+// 	-	stdin
+// 	http://	http 2xx responses
 package reader
 
 import (
