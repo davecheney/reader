@@ -24,7 +24,7 @@ func Open(uri string) (io.ReadCloser, error) {
 	switch {
 	case uri == "-":
 		return newStdinReader()
-	case strings.HasPrefix(uri, "http://"):
+	case strings.HasPrefix(uri, "http://"), strings.HasPrefix(uri, "https://"):
 		return newHttpReader(uri)
 	}
 	return nil, fmt.Errorf("no handler registered for %q", uri)
