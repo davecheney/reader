@@ -1,5 +1,16 @@
 // cat consumes the input from a reader specified on the command line
 // and outputs it to stdout.
+//
+// Examples
+//
+// # read from standard in:
+//
+// $ echo "foo" | ./cat -
+// foo 
+//
+// # cat the contents of a remote url:
+//
+// $ ./cat http://dave.cheney.net/
 package main
 
 import (
