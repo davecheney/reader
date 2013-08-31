@@ -12,6 +12,7 @@ package reader
 import (
 	"fmt"
 	"io"
+	"net"
 	"os"
 	"strings"
 
@@ -26,6 +27,8 @@ func Open(uri string) (io.ReadCloser, error) {
 		return newStdinReader()
 	case strings.HasPrefix(uri, "http://"), strings.HasPrefix(uri, "https://"):
 		return newHttpReader(uri)
+	case strings.HasPrefix(uri, "tcp://"):
+		return newTcpReader(uri)
 	}
 	return nil, fmt.Errorf("no handler registered for %q", uri)
 }
@@ -49,4 +52,13 @@ func newHttpReader(uri string) (io.ReadCloser, error) {
 		return nil, &http.StatusError{status}
 	}
 	return body, nil
+}
+
+func newTcpReader(uri string) (io.ReadCloser, error) {
+	dst := strings.TrimPrefix(uri, "tcp://")
+	conn, err := net.Dial("tcp", dst)
+	if err != nil {
+		return nil, err
+	}
+	return conn, nil
 }
