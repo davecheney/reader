@@ -25,6 +25,8 @@ func Open(uri string) (io.ReadCloser, error) {
 	switch {
 	case uri == "-":
 		return newStdinReader()
+	case strings.HasPrefix(uri, "file://"):
+		return newFileReader(uri)
 	case strings.HasPrefix(uri, "http://"), strings.HasPrefix(uri, "https://"):
 		return newHttpReader(uri)
 	case strings.HasPrefix(uri, "tcp://"):
@@ -41,6 +43,11 @@ func (r *readCloser) Close() error { return nil }
 
 func newStdinReader() (io.ReadCloser, error) {
 	return &readCloser{os.Stdin}, nil
+}
+
+func newFileReader(uri string) (io.ReadCloser, error) {
+	fname := strings.TrimPrefix(uri, "file://")
+	return os.Open(fname)
 }
 
 func newHttpReader(uri string) (io.ReadCloser, error) {
